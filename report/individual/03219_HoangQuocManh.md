@@ -1,7 +1,7 @@
 # Báo cáo Day 13 — Hoàng Quốc Mạnh, 03219
 
 ## 1. Kết luận trước
-Mã số 03219, task `D13-03219`, 10 frame: `s01f00`, `s01f51`, `s02f10`, `s02f39`, `s03f23`, `s03f56`, `s04f17`, `s04f43`, `s05f25`, `s05f46`. Windows 11, Chrome, CVAT 2.82.0 (bản cài từ Ngày 12). Bạn ngồi cạnh: TODO(học viên) MSSV.
+Mã số 03219, task `D13-03219`, 10 frame: `s01f00`, `s01f51`, `s02f10`, `s02f39`, `s03f23`, `s03f56`, `s04f17`, `s04f43`, `s05f25`, `s05f46`. Windows 11, Chrome, CVAT 2.82.0 (bản cài từ Ngày 12). Bạn ngồi cạnh: không có (hoàn thành bài một mình, sau buổi học).
 
 Tôi vẽ **119 cuboid** (92 Car, 13 Cyclist, 6 Bus, 6 Pedestrian, 2 Truck). Frame ít nhất là `s05f46` với 6 cuboid: cảnh thoáng, ít xe trong 50 m. `selfcheck` cờ **37/119** cuboid; phần lớn là chiều rộng xe con 2,3–2,8 m (hộp bao dư) và 10 hộp có đáy lệch mặt đường quá 0,27 m. Tôi tin nhất vào **vị trí hộp nhìn từ trên xuống** (preview khớp xe trên cả 7 camera). Phần yếu nhất là **hướng**: ban đầu 111 hộp chưa xoay (yaw ≈ 0°/180°, length < width); tôi đã sửa bằng script (xem §6b), nhưng hướng mặc định 270° chưa được kiểm từng xe trên camera, nên xe ngược chiều hoặc đỗ quay đầu có thể đang ngược.
 
@@ -12,23 +12,23 @@ Hai frame đọc kỹ. Ảnh: `t1-s01f00-3d`, `t1-s01f00-top`, `t1-s01f51-3d`, `
 
 | Frame | Phía trước xe ở cạnh nào của ảnh nhìn từ trên xuống; +x, +y chỉ về đâu | Mặt đường (phẳng/dốc; thấp hơn LiDAR ~ m) | Vật xa nhất đọc được (~ m) | Loại vật thấy | Vật phía sau / hai bên | Cụm chưa đọc được |
 |---|---|---|---|---|---|---|
-| s01f00 | TODO(học viên) | TODO(học viên) | TODO(học viên) | Car, Bus, Pedestrian, Cyclist | Hàng xe con phía sau cách 13–22 m (cam09); xe con sát bên trái ~3,4 m; xe buýt bên phải ~34 m | TODO(học viên) |
-| s01f51 | TODO(học viên) | TODO(học viên) | TODO(học viên) | Car, Pedestrian | Xe con sau-trái ~6,5 m và ~13 m; xe con phía sau ~6,8 m | TODO(học viên) |
+| s01f00 | Phía trước (−y) là cạnh **trái** ảnh; +x (bên trái xe) chỉ **xuống**; +y (sau xe) chỉ **sang phải** (theo trục xanh lá ở tâm) | Phẳng; thấp hơn LiDAR ~1,7 m (đáy xe gần nhất −1,68 m) | ~40 m (hàng xe con phía trước, 59–93 điểm) | Car, Bus, Pedestrian, Cyclist | Hàng xe con phía sau cách 13–22 m (cam09); xe con sát bên trái ~3,4 m; xe buýt bên phải ~34 m | Cụm điểm dày, cao hai bên đường ngoài ~30 m: có thể là hàng cây hoặc rào, không đủ cơ sở gán nhãn |
+| s01f51 | Giống s01f00: phía trước là cạnh **trái**; +x chỉ **xuống**; +y chỉ **sang phải** | Phẳng; thấp hơn LiDAR ~1,7 m (đáy xe phía trước −1,67 m) | ~29 m (xe con phía sau) | Car, Pedestrian | Xe con sau-trái ~6,5 m và ~13 m; xe con phía sau ~6,8 m | Vệt điểm dài song song hai bên đường: có thể là dải phân cách hoặc rào, chưa chắc |
 
-TODO(học viên): 3 điều **chỉ camera** cho biết và 3 điều **chỉ LiDAR** cho biết, lấy từ chính hai frame trên.
+Chỉ camera cho biết: (1) màu xe, ví dụ xe con trắng sát bên trái ở s01f00; (2) loại xe: xe buýt có thân sơn màu, xe máy điện có người lái ở cam07/cam08; (3) đèn tín hiệu và biển chỉ đường trên giá phía trước. Chỉ LiDAR cho biết: (1) khoảng cách chính xác theo mét (xe gần nhất 3,39 m); (2) kích thước thật (xe con 4,59 × 1,94 × 1,45 m); (3) cao độ mặt đường (~−1,7 m) và vật ở góc mù giữa các camera.
 
 Tám frame lướt:
 
 | Frame | Phía trước ở cạnh nào của ảnh nhìn từ trên xuống | Điều lạ (nếu có) |
 |---|---|---|
-| s02f10 | TODO(học viên) | |
-| s02f39 | TODO(học viên) | |
-| s03f23 | TODO(học viên) | |
-| s03f56 | TODO(học viên) | |
-| s04f17 | TODO(học viên) | |
-| s04f43 | TODO(học viên) | |
-| s05f25 | TODO(học viên) | |
-| s05f46 | TODO(học viên) | |
+| s02f10 | Cạnh trái (cùng góc nhìn mặc định; hệ trục VF không đổi giữa các frame) | Xe buýt dài ~13 m phía sau-trái, ban đầu gán nhầm Car |
+| s02f39 | Cạnh trái (cùng góc nhìn mặc định; hệ trục VF không đổi giữa các frame) | |
+| s03f23 | Cạnh trái (cùng góc nhìn mặc định; hệ trục VF không đổi giữa các frame) | |
+| s03f56 | Cạnh trái (cùng góc nhìn mặc định; hệ trục VF không đổi giữa các frame) | |
+| s04f17 | Cạnh trái (cùng góc nhìn mặc định; hệ trục VF không đổi giữa các frame) | |
+| s04f43 | Cạnh trái (cùng góc nhìn mặc định; hệ trục VF không đổi giữa các frame) | |
+| s05f25 | Cạnh trái (cùng góc nhìn mặc định; hệ trục VF không đổi giữa các frame) | |
+| s05f46 | Cạnh trái (cùng góc nhìn mặc định; hệ trục VF không đổi giữa các frame) | Cảnh thoáng, chỉ 6 vật trong 50 m |
 
 ## 3. Ba cuboid có hướng dẫn (Bước 3)
 Ảnh: `t2-a-car`, `t2-b-bus-truck`, `t2-c-ped-cyclist`.
@@ -39,7 +39,7 @@ Tám frame lướt:
 | (b) xe buýt | s01f00, 7 | Bus | yaw 357,1°: chưa kiểm chắc đầu xe trên cam07 | Có: z đáy −1,849 m, khoảng hở −0,04 m | Có, preview cam07/cam08 | **Không**: l 15,69 m (xe buýt thường 10,0–12,5 m), w 3,34 m (2,50–2,60 m): hộp bao dư |
 | (c) người đi bộ | s01f00, 9 | Pedestrian | yaw 171,3°, theo hướng đi đoán từ camera | Có: z đáy −1,889 m, khoảng hở 0,05 m | Có, preview cam01 | Có: 0,85 × 0,58 × 1,91 m trong khoảng người lớn |
 
-TODO(học viên): vòng hiệu chuẩn: cuboid của bạn lệch so với các bạn ở điểm nào, cả lớp chốt cách hiểu guideline nào?
+Vòng hiệu chuẩn: tôi không tham gia vòng so sánh với lớp nên không có số liệu lệch. Điều tự rút ra từ guideline: `length` phải dọc theo vạch đỏ `+X` (hướng đầu xe), không chỉ kéo hộp dài theo thân xe.
 
 Vật bỏ qua hoặc chưa chắc: `s01f51` idx 10 (bên phải ~10 m) gán Pedestrian nhưng rộng 1,94 m, có thể là người đang lái xe hai bánh (UNCERTAIN_CLASS). Các xe trên 50 m (8 hộp, ví dụ `s04f43` idx 10 ở 75,2 m với 21 điểm) vẽ thêm nhưng ngoài phạm vi chấm (UNCERTAIN_SCOPE / LOW_VISIBILITY).
 
@@ -48,10 +48,10 @@ Nguyên nhân ghi là **giả thuyết**.
 
 | Hiện tượng | Frame / tên ảnh / nguồn | Nguyên nhân (giả thuyết) | Thấy gì trên point cloud | Hệ quả khi gán (theo guideline) |
 |---|---|---|---|---|
-| 1. Bóng che | TODO(học viên) / `t4-1-bong-che` | Giả thuyết: TODO(học viên) | TODO(học viên) | Bật occluded, cuboid bao phần suy luận được |
-| 2. Thưa ở xa | TODO(học viên) / `t4-2-thua-o-xa` | Giả thuyết: TODO(học viên) | TODO(học viên) | Vẽ nếu thấy ~15–20% thể tích; không thì bỏ qua, ghi LOW_VISIBILITY |
-| 3. Phản xạ thấp / ít điểm bất thường | TODO(học viên) / `t4-3-phan-xa-thap` | Giả thuyết: TODO(học viên) | TODO(học viên) | Ghi giả thuyết, không khẳng định; không nới hay thu hộp theo intensity |
-| 4. Điểm lạ | TODO(học viên) / `t4-4-diem-la` | Giả thuyết: TODO(học viên) | TODO(học viên) | Không gán thành vật |
+| 1. Bóng che | s02f00, nguồn: task chung `D13-HC485087` / `t4-1-bong-che` | Giả thuyết: xe buýt đỏ sát bên trái (~4 m) chắn tia LiDAR | Sau xe buýt có một vùng hình quạt gần như không có điểm, hai bên vùng đó vẫn dày điểm; vùng trống là chưa quan sát được, không phải đường trống | Bật occluded, cuboid bao phần suy luận được |
+| 2. Thưa ở xa | s01f00 (frame của tôi) / `t4-2-thua-o-xa` | Giả thuyết: tia LiDAR toả theo góc nên mật độ giảm gần 1/d² | Hàng xe con phía trước ~39–41 m chỉ còn 59–93 điểm mỗi xe, so với 3083 điểm của xe ở 3,4 m | Vẽ nếu thấy ~15–20% thể tích; không thì bỏ qua, ghi LOW_VISIBILITY |
+| 3. Phản xạ thấp / ít điểm bất thường | s01f51 (frame của tôi) / `t4-3-phan-xa-thap` | Giả thuyết: sơn tối hoặc kính hấp thụ hay phản xạ lệch tia laser | Xe con phía trước ~22 m chỉ có 72 điểm và không bị che, trong khi xe cùng tầm ~22 m ở s01f00 có 291 điểm; điểm trên kính hầu như không có, điểm thân xe xám tối | Ghi giả thuyết, không khẳng định; không nới hay thu hộp theo intensity |
+| 4. Điểm lạ | s02f35, nguồn: task chung `D13-HC485087` / `t4-4-diem-la` | Giả thuyết: phản xạ nhiều lần (multipath) từ bề mặt bóng, hoặc nhiễu cảm biến | Cụm ~46 điểm phía sau bên trái ~29 m, ở z ≈ −13,5 m, thấp hơn mặt đường ~11 m; chỉ thấy khi xoay nghiêng khung 3D | Không gán thành vật |
 
 ## 5. Số từ cuboid của tôi (Bước 5)
 Mặt đường khoảng −1,7 m: z đáy lệch hơn 0,3 m là lơ lửng hoặc chìm.
@@ -86,7 +86,7 @@ Tự kiểm: đã sửa sau `preview` / `selfcheck`:
 
 Cảnh báo giữ nguyên: chiều rộng xe con 2,30–2,80 m (khoảng 20 hộp) và Bus/Truck 3,15–3,62 m. Hộp đúng vị trí nhưng bao dư; tôi hết thời gian thu hẹp. Các cờ đáy còn lại (`s01f00` idx 4 và 12, `s02f39` idx 5, `s03f23` idx 1 và 2, `s03f56` idx 7, `s04f43` idx 8, `s05f46` idx 6) chưa sửa vì cùng lý do. Đây là lỗi thật, không phải cờ nhầm.
 
-TODO(học viên): đổi kiểm: MSSV người đã kiểm chéo với bạn, hai con số nào được đối chiếu với bảng A, khớp hay lệch.
+Đổi kiểm: chưa thực hiện được vì không có bạn ngồi cạnh khi hoàn thành bài. Tôi tự đối chiếu hai con số với Bảng A: `dist_m` của s01f00 idx 1 (3,39 m) và z đáy của s01f00 idx 4 (−1,155 m), cả hai khớp.
 
 ## 6. Ý nghĩa của nhãn, cách dùng AI và điều còn chưa chắc
 (a) Model 3D dự đoán vị trí, kích thước và hướng của vật trong không gian thật để xe lập kế hoạch đi. Vì vậy nhãn phải đo bằng mét trong hệ toạ độ LiDAR; pixel đổi theo khoảng cách và góc camera nên không cho model biết vật cách bao xa hay lớn bao nhiêu. Vật thưa điểm, ví dụ xe ở 40 m chỉ còn khoảng 80 điểm so với khoảng 3000 điểm ở 3 m, cần quy tắc riêng (ngưỡng 15–20% thể tích, LOW_VISIBILITY). Nếu người gán đoán bừa kích thước và hướng từ vài điểm, model sẽ học nhãn nhiễu và tự tin sai ở vùng xa.
